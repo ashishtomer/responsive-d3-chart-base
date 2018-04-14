@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"> 
+	<title>responsive-d3-chart-base</title>
+	<script src="./d3.min.js"></script>
+
+	<style>
+		div#axes {
+			padding: 50px;
+			display: block;
+			border: 1px solid #e2e2e2;
+			margin: 0 auto;
+			min-height: 300px;
+			min-width: 300px;
+			max-height: 500px;
+		}
+
+		svg {
+			border: 1px solid grey;
+		}
+
+		.x-axis {
+			fill: none;
+			stroke: #000;
+		    shape-rendering: crispEdges;
+		}
+
+		.x-axis-with-minor-ticks {
+			fill: none;
+			stroke: #000;
+		    shape-rendering: crispEdges;
+		}
+
+		.x-axis text {
+			font: 10px sans-serif;
+			font-weight: small;
+		}
+
+		.y-axis {
+			fill: none;
+			stroke: #000;
+		    shape-rendering: crispEdges;
+		}
+
+		.y-axis-with-minor-ticks {
+			fill: none;
+			stroke: #000;
+		    shape-rendering: crispEdges;
+		}
+
+		.y-axis text {
+			font: 10px sans-serif;
+			font-weight: small;
+		}
+
+	</style>
+
+</head>
+<body onresize="reRender()">
+	<div id="axes">	</div>
+
+	<script type="text/javascript">
+		
+		var heightInPx = window.getComputedStyle(document.getElementById('axes'), null).getPropertyValue('height');
+		var height = parseInt(heightInPx.substring(0, heightInPx.indexOf('px')));
+		var widthInPx = window.getComputedStyle(document.getElementById('axes'), null).getPropertyValue('width');
+		var width = parseInt(widthInPx.substring(0, widthInPx.indexOf('px')));
+		var margin = 15;
+
+		/*
+		* The x axis properties
+		*/
+		var xAxisLength;
+		var xAxisScale;
+		var xAxis;
+		var xAxisWithMinorTicks;
+
+		/*
+		* The x axis properties
+		*/
+		var yAxisLength;
+		var yAxisScale;
+		var yAxis;
+		var yAxisWithMinorTicks;
+
+		var svg = d3.select('div#axes').append('svg')
+					.classed('graph-with-grid-lines', true)
+					.attr('width', width)
+					.attr('height', height);
+
+		function setXAxisLengthAndScale() {
+			xAxisLength = width - margin * 5;
+			xAxisScale = d3.scale.linear()
+								.domain([0, 1000])
+								.range([margin, xAxisLength]);
+		}
+
+		function renderXGridLines() {
+
+			d3.selectAll('g.x-axis g.tick line').remove();			
+
+			d3.selectAll('g.x-axis g.tick')
+				.append('line')
+						.attr('x1', 0)
+						.attr('y1', 0)
+						.attr('x2', 0)
+						.attr('y2', -(height - margin * 3))
+						.style('stroke-opacity', 0.4);
+
+			d3.selectAll('g.x-axis-with-minor-ticks g.tick line').remove();
+
+			d3.selectAll('g.x-axis-with-minor-ticks g.tick')
+				.append('line')
+						.attr('x1', 0)
+						.attr('y1', 0)
+						.attr('x2', 0)
+						.attr('y2', -(height - margin * 3))
+						.style('stroke-opacity', 0.2);
+		}
+
+		function defineXAxes(xOrient, xAxisScale) {
+			xAxis = d3.svg.axis()
+							.scale(xAxisScale)
+							.ticks(5)
+							.tickSize(10)
+							.tickPadding(5)
+							.orient(xOrient);
+
+			xAxisWithMinorTicks = d3.svg.axis()
+							.scale(xAxisScale)
+							.ticks(50)
+							.tickSize(5)
+							.tickPadding(5)
+							.tickFormat(function(v){
+								return '';
+							})
+							.orient(xOrient);
+		}
+
+		function renderXAxis(svg) {
+
+			d3.selectAll('g.x-axis').remove();
+
+			svg.append('g')
+				.attr('class', 'x-axis')
+				.attr('transform', 'translate(' + margin * 3 + ', ' + (	height - margin * 2) + ')')
+				.call(xAxis);
+
+			d3.selectAll('g.x-axis-with-minor-ticks').remove();
+
+			svg.append('g')
+				.attr('class', 'x-axis-with-minor-ticks')
+				.attr('transform', 'translate(' + margin * 3 + ', ' + (	height - margin * 2) + ')')
+				.call(xAxisWithMinorTicks);
+		}
+
+		function renderXAxisWithGrids(xOrient, svg) {
+			setXAxisLengthAndScale();
+			defineXAxes(xOrient, xAxisScale);
+			renderXAxis(svg);
+			renderXGridLines();
+		}
+
+		function setYAxisLengthAndScale() {
+			yAxisLength = height - margin * 3;
+			yAxisScale = d3.scale.linear()
+								.domain([0, 1000])
+								.range([yAxisLength - margin , 0]);
+		}
+
+		function defineYAxes(yOrient, yAxisScale) {
+			yAxis = d3.svg.axis()
+							.scale(yAxisScale)
+							.ticks(5)
+							.tickSize(10)
+							.tickPadding(5)
+							.orient(yOrient);
+
+			yAxisWithMinorTicks = d3.svg.axis()
+							.scale(yAxisScale)
+							.ticks(50)
+							.tickSize(5)
+							.tickPadding(5)
+							.tickFormat(function(v) {
+								return '';
+							})
+							.orient(yOrient);
+		}
+
+		function renderYAxis(svg) {
+
+			d3.selectAll('g.y-axis').remove();
+
+			svg.append('g')
+				.attr('class', 'y-axis')
+				.attr('transform', 'translate(' + margin * 4 + ', ' + margin * 2 + ')')
+				.call(yAxis);
+
+			d3.selectAll('g.y-axis-with-minor-ticks').remove();
+
+			svg.append('g')
+				.attr('class', 'y-axis-with-minor-ticks')
+				.attr('transform', 'translate(' + margin * 4 + ', ' + margin * 2 + ')')
+				.call(yAxisWithMinorTicks);
+		}
+
+		function renderYGridLines() {
+			d3.selectAll('g.y-axis g.tick line').remove();
+
+			d3.selectAll('g.y-axis g.tick')
+				.append('line')
+						.attr('x1', 0)
+						.attr('y1', 0)
+						.attr('x2', width - margin * 5)
+						.attr('y2', 0)
+						.style('stroke-opacity', 0.5);
+
+			d3.selectAll('g.y-axis-with-minor-ticks g.tick line').remove();
+
+			d3.selectAll('g.y-axis-with-minor-ticks g.tick')
+				.append('line')
+						.attr('x1', 0)
+						.attr('y1', 0)
+						.attr('x2', width - margin * 5)
+						.attr('y2', 0)
+						.style('stroke-opacity', 0.2);
+		}
+
+		function renderYAxisWithGrids(yOrient, svg) {
+			setYAxisLengthAndScale();
+			defineYAxes(yOrient, yAxisScale);
+			renderYAxis(svg);
+			renderYGridLines();
+		}
+
+		function reRender() {
+
+			/*
+			* Set height according to the wrapping div
+			*/
+			heightInPx = window.getComputedStyle(document.getElementById('axes'), null).getPropertyValue('height');
+		 	height = parseInt(heightInPx.substring(0, heightInPx.indexOf('px')));
+		 	widthInPx = window.getComputedStyle(document.getElementById('axes'), null).getPropertyValue('width');
+			width = parseInt(widthInPx.substring(0, widthInPx.indexOf('px')));
+
+			/*
+			* Re-render the SVG canvas
+			*/
+			d3.select('div#axes svg')
+					.attr('width', width)
+					.attr('height', height);
+
+			/*
+			* Re-render the x-axis
+			**/
+
+			setXAxisLengthAndScale();
+			defineXAxes('bottom', xAxisScale);
+			renderXAxis(svg);
+			renderXGridLines();
+		
+			/*
+			* Re-render the y-axis
+			**/
+
+			setYAxisLengthAndScale();
+			defineYAxes('left', yAxisScale);
+			renderYAxis(svg);
+			renderYGridLines();
+		}
+
+		renderXAxisWithGrids('bottom', svg);
+		renderYAxisWithGrids('left', svg);
+
+	</script>
+
+</body>
+</html>
