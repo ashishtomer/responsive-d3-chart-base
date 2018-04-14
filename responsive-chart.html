@@ -6,6 +6,7 @@
 	<script src="./d3.min.js"></script>
 
 	<style>
+
 		div#axes {
 			padding: 50px;
 			display: block;
@@ -23,13 +24,13 @@
 		.x-axis {
 			fill: none;
 			stroke: #000;
-		    shape-rendering: crispEdges;
+	    shape-rendering: crispEdges;
 		}
 
 		.x-axis-with-minor-ticks {
 			fill: none;
 			stroke: #000;
-		    shape-rendering: crispEdges;
+	    shape-rendering: crispEdges;
 		}
 
 		.x-axis text {
@@ -40,13 +41,13 @@
 		.y-axis {
 			fill: none;
 			stroke: #000;
-		    shape-rendering: crispEdges;
+	    shape-rendering: crispEdges;
 		}
 
 		.y-axis-with-minor-ticks {
 			fill: none;
 			stroke: #000;
-		    shape-rendering: crispEdges;
+	    shape-rendering: crispEdges;
 		}
 
 		.y-axis text {
@@ -58,7 +59,7 @@
 
 </head>
 <body onresize="reRender()">
-	<div id="axes">	</div>
+	<div id="axes"></div>
 
 	<script type="text/javascript">
 		
@@ -85,15 +86,17 @@
 		var yAxisWithMinorTicks;
 
 		var svg = d3.select('div#axes').append('svg')
-					.classed('graph-with-grid-lines', true)
-					.attr('width', width)
-					.attr('height', height);
+									.classed('graph-with-grid-lines', true)
+									.attr('width', width)
+									.attr('height', height);
 
 		function setXAxisLengthAndScale() {
+			
 			xAxisLength = width - margin * 5;
+			
 			xAxisScale = d3.scale.linear()
-								.domain([0, 1000])
-								.range([margin, xAxisLength]);
+					.domain([0, 1000])
+					.range([margin, xAxisLength]);
 		}
 
 		function renderXGridLines() {
@@ -102,40 +105,41 @@
 
 			d3.selectAll('g.x-axis g.tick')
 				.append('line')
-						.attr('x1', 0)
-						.attr('y1', 0)
-						.attr('x2', 0)
-						.attr('y2', -(height - margin * 3))
-						.style('stroke-opacity', 0.4);
+					.attr('x1', 0)
+					.attr('y1', 0)
+					.attr('x2', 0)
+					.attr('y2', -(height - margin * 3))
+					.style('stroke-opacity', 0.4);
 
 			d3.selectAll('g.x-axis-with-minor-ticks g.tick line').remove();
 
 			d3.selectAll('g.x-axis-with-minor-ticks g.tick')
 				.append('line')
-						.attr('x1', 0)
-						.attr('y1', 0)
-						.attr('x2', 0)
-						.attr('y2', -(height - margin * 3))
-						.style('stroke-opacity', 0.2);
+					.attr('x1', 0)
+					.attr('y1', 0)
+					.attr('x2', 0)
+					.attr('y2', -(height - margin * 3))
+					.style('stroke-opacity', 0.2);
 		}
 
 		function defineXAxes(xOrient, xAxisScale) {
+			
 			xAxis = d3.svg.axis()
-							.scale(xAxisScale)
-							.ticks(5)
-							.tickSize(10)
-							.tickPadding(5)
-							.orient(xOrient);
+					.scale(xAxisScale)
+					.ticks(5)
+					.tickSize(10)
+					.tickPadding(5)
+					.orient(xOrient);
 
 			xAxisWithMinorTicks = d3.svg.axis()
-							.scale(xAxisScale)
-							.ticks(50)
-							.tickSize(5)
-							.tickPadding(5)
-							.tickFormat(function(v){
-								return '';
-							})
-							.orient(xOrient);
+						.scale(xAxisScale)
+						.ticks(50)
+						.tickSize(5)
+						.tickPadding(5)
+						.tickFormat(function(v){
+							return '';
+						})
+						.orient(xOrient);
 		}
 
 		function renderXAxis(svg) {
@@ -163,29 +167,32 @@
 		}
 
 		function setYAxisLengthAndScale() {
+
 			yAxisLength = height - margin * 3;
+			
 			yAxisScale = d3.scale.linear()
-								.domain([0, 1000])
-								.range([yAxisLength - margin , 0]);
+					.domain([0, 1000])
+					.range([yAxisLength - margin , 0]);
 		}
 
 		function defineYAxes(yOrient, yAxisScale) {
+
 			yAxis = d3.svg.axis()
-							.scale(yAxisScale)
-							.ticks(5)
-							.tickSize(10)
-							.tickPadding(5)
-							.orient(yOrient);
+					.scale(yAxisScale)
+					.ticks(5)
+					.tickSize(10)
+					.tickPadding(5)
+					.orient(yOrient);
 
 			yAxisWithMinorTicks = d3.svg.axis()
-							.scale(yAxisScale)
-							.ticks(50)
-							.tickSize(5)
-							.tickPadding(5)
-							.tickFormat(function(v) {
-								return '';
-							})
-							.orient(yOrient);
+						.scale(yAxisScale)
+						.ticks(50)
+						.tickSize(5)
+						.tickPadding(5)
+						.tickFormat(function(v) {
+							return '';
+						})
+						.orient(yOrient);
 		}
 
 		function renderYAxis(svg) {
@@ -206,25 +213,26 @@
 		}
 
 		function renderYGridLines() {
+
 			d3.selectAll('g.y-axis g.tick line').remove();
 
 			d3.selectAll('g.y-axis g.tick')
 				.append('line')
-						.attr('x1', 0)
-						.attr('y1', 0)
-						.attr('x2', width - margin * 5)
-						.attr('y2', 0)
-						.style('stroke-opacity', 0.5);
+					.attr('x1', 0)
+					.attr('y1', 0)
+					.attr('x2', width - margin * 5)
+					.attr('y2', 0)
+					.style('stroke-opacity', 0.5);
 
 			d3.selectAll('g.y-axis-with-minor-ticks g.tick line').remove();
 
 			d3.selectAll('g.y-axis-with-minor-ticks g.tick')
 				.append('line')
-						.attr('x1', 0)
-						.attr('y1', 0)
-						.attr('x2', width - margin * 5)
-						.attr('y2', 0)
-						.style('stroke-opacity', 0.2);
+					.attr('x1', 0)
+					.attr('y1', 0)
+					.attr('x2', width - margin * 5)
+					.attr('y2', 0)
+					.style('stroke-opacity', 0.2);
 		}
 
 		function renderYAxisWithGrids(yOrient, svg) {
@@ -248,8 +256,8 @@
 			* Re-render the SVG canvas
 			*/
 			d3.select('div#axes svg')
-					.attr('width', width)
-					.attr('height', height);
+				.attr('width', width)
+				.attr('height', height);
 
 			/*
 			* Re-render the x-axis
